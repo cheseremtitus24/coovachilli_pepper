@@ -1,51 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 
-    <link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <!--    <link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">-->
+    <!--    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">-->
 
     <title>Pepper</title>
 
     <style type="text/css">
-      body {
-        font-family: 'Lato', 'Helvetica Neue';
-        background: #f9f9f9;
-        color: #666;
-      }
+        body {
+            font-family: 'Lato', 'Helvetica Neue';
+            background: #f9f9f9;
+            color: #666;
+        }
 
-      #welcome {
-        margin-top: 60px;
-      }
+        #welcome {
+            margin-top: 60px;
+        }
 
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <div class="container">
+<div class="container">
 
-      <div id="welcome">
+    <div id="welcome">
         <p class="lead text-center">Open your web inspector and play with <strong>pepper</strong> object :)</p>
-      </div>
-
     </div>
 
-    <script src="/pepper.js"></script>
+</div>
 
-    <script type="text/javascript">
+<script src="/pepper.js"></script>
 
-      var pepper = Pepper({
-        host: 'johnny.futur3.it',
+<script type="text/javascript">
+
+    var pepper = Pepper({
+        host: 'app.paywifigo.me',
+        port: 4990,
         interval: 5000,
-        ssl: true
-      });
+        ssl: true,
+        // host the below php file in a server.
+        // uamservice: 'chilli-uamservice-pap-chap.php', // local server
+        uamservice: 'https://app.paywifigo.me/chilli-uamservice-pap-chap.php' // cloud server
+    });
+    // enable debug
+    localStorage.debug = '*';
 
-    </script>
-  </body>
+    // copy and paste within browser developer console to play around with
+
+
+    pepper.logon('testdev', 'testdev', {protocol: 'CHAP'}, function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (data.clientState === 1) {
+                console.log("hooray you are logged in");
+                console.log(pepper.data.userurl);
+            } else {
+                console.log(data);
+            }
+        }
+    });
+
+</script>
+</body>
 
 </html>

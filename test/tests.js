@@ -42,7 +42,6 @@ describe('Pepper', function() {
     var pepper = Pepper({
       querystring: sampleQs
     });
-
     expect(pepper.data).to.have.property('called');
     expect(pepper.data).to.have.property('challenge');
     expect(pepper.data).to.have.property('ip');
@@ -59,7 +58,8 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: '10.10.0.1',
       port: 3990,
-      ssl: false
+      ssl: false,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php'
     });
 
     expect(pepper._baseUrl).to.equal('http://10.10.0.1:3990/json/');
@@ -71,6 +71,7 @@ describe('Pepper', function() {
       host: '10.10.0.1',
       port: 3990,
       ssl: false,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       querystring: sampleQs
     });
 
@@ -82,6 +83,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -100,6 +102,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -116,6 +119,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -132,6 +136,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -146,6 +151,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -164,6 +170,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -183,6 +190,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -202,6 +210,7 @@ describe('Pepper', function() {
     var pepper = Pepper({
       host: 'localhost',
       port: 5000,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       ssl: false
     });
 
@@ -223,7 +232,7 @@ describe('Pepper', function() {
       host: 'localhost',
       port: 5000,
       ssl: false,
-      uamservice: 'https://uamservice.service.com'
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
     });
 
     pepper.logon('test', 'test', function(err, data) {
@@ -240,6 +249,7 @@ describe('Pepper', function() {
       host: 'localhost',
       port: 5000,
       ssl: false,
+      uamservice: 'http://localhost/chilli-uamservice-pap-chap.php',
       interval: 2500
     });
 
