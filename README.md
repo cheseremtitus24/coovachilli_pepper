@@ -20,22 +20,36 @@ Basically it's a rewrite of [ChilliLibrary.js](http://dev.coova.org/svn/coova-ch
 `npm install chilli-pepper`, then:
 
 ```js
-var Pepper = require('chilli-pepper');
+<script type="text/javascript">
 
-var pepper = Pepper({
-  host: '192.168.1.1',
-  port: 3990
-});
+    var pepper = Pepper({
+        host: 'app.paywifigo.me',
+        port: 4990,
+        interval: 5000,
+        ssl: true,
+        // host the below php file in a server.
+        // uamservice: 'chilli-uamservice-pap-chap.php', // local server
+        uamservice: 'https://app.paywifigo.me/chilli-uamservice-pap-chap.php' // cloud server
+    });
+    // enable debug
+    localStorage.debug = '*';
 
-pepper.logon('john', 'd0E', function(err, data) {
+    // copy and paste within browser developer console to play around with
 
-  if (data.clientState === 1) {
-    // User is now logged in
-  }
 
-  // ...
-
-});
+    pepper.logon('testdev', 'testdev', {protocol: 'CHAP'}, function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (data.clientState === 1) {
+                console.log("hooray you are logged in");
+                console.log(pepper.data.userurl);
+            } else {
+                console.log(data);
+            }
+        }
+    });
+</script>
 ```
 
 ### Global
@@ -184,6 +198,11 @@ Then go to `http://localhost:4000`
 
 - write more tests
 - add test coverage info
+
+## BUG Fixes & UPDATES
+- Computation of chap password locally is *NOT* supported because it requires the *RADSECRET* to Encrypt the resulting CHAP Password ("NEED to STORE RADSECRET within the PAGE ***SECURITY RISK***)
+- CHAP password and PAP password are computed by the PHP script are returned in json format.
+- UAM Service **MUST** be provided in order for the coovachilli authentication to be successful
 
 
 ## License
