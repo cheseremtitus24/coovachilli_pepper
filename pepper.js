@@ -28,7 +28,7 @@ function Pepper(options) {
     this.querystring = !isNode ? window.location.search.slice(1) : null;
   }
 
-  this.data = utils.parseQS(this.querystring);
+  this.data = utils.parseQS(this.querystring, options);
   debug('Extracted Query String from parsed url: %s',JSON.stringify(this.data));
 
   this.status = {};

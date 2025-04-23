@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--copy this file to /etc/chilli/www-->
+<!--feature: saves the userurl to a cookie-->
+<html>
+<head>
+    <title>Coova</title>
+    <!-- redirecting... either by meta tag or javascript -->
+    <script type="text/javascript" language="Javascript">
+    //<!--
+    function getURLParam(n) {
+        var href = window.location.href;
+        var idx = href.indexOf("?");
+        if (idx > -1) {
+            var qs = href.substr(idx + 1);
+            var params = new URLSearchParams(qs);
+            if (params.has(n)) {
+                return decodeURIComponent(params.get(n));
+            }
+        }
+        return null;
+    }
+
+    var loginUrl;
+    function redirect() { 
+        if (loginUrl) {
+            window.location = loginUrl; 
+        } else {
+            alert("Login URL not found!");
+        }
+        return false; 
+    }
+
+    window.onload = function() {
+        loginUrl = getURLParam("loginurl");
+        if (loginUrl) {
+            // Dynamically set meta refresh URL to loginurl
+            document.querySelector("meta[http-equiv='refresh']").setAttribute("content", `7; URL=${loginUrl}`);
+            setTimeout(redirect, 5000); 
+        }
+    }
+    //-->
+    </script>
+    <meta http-equiv="refresh" content="7; URL=/prelogin"> <!-- fallback -->
+</head>
+<body style="margin: 0pt auto; height:100%;">
+<div style="width:100%;height:80%;position:fixed;display:table;">
+    <p style="display: table-cell; line-height: 2.5em;
+    vertical-align:middle;text-align:center;color:grey;">
+        <a href="#" onclick="javascript:return redirect();">
+            <img src="coova.jpg" alt="Coova Logo" border="0" height="39" width="123"/>
+        </a><br>
+        <small><img src="wait.gif" alt="Loading"/> redirecting...</small>
+    </p>
+    <br><br>
+</div>
+<script>
+    // Function to get a cookie by name
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? match[2] : null;
+    }
+
+    // Function to set a cookie with expiration
+    function setCookie(name, value, days) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = name + "=" + value + ";expires=" + expires.toUTCString() + ";path=/";
+    }
+    setCookie("chilli", data.country, 20); // Store country for 20 days
+    const storedCountry = getCookie("chilli");
+</script>
+</body>
+</html>
+
