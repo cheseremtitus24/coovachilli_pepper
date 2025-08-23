@@ -52,6 +52,113 @@ Basically it's a rewrite of [ChilliLibrary.js](http://dev.coova.org/svn/coova-ch
 </script>
 ```
 
+### Advanced Example using sweet alert library
+```js 
+let loginUsername = "john";
+let loginPassword = "supersecret";
+pepper.logon(loginUsername, loginPassword, {protocol: 'CHAP'}, function (err, result) {
+            // debugger
+            if (err) {
+                if (err.message.includes('Cannot find a challenge')) {
+                    Swal.fire({
+                        imageUrl: "loading2.gif",
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        title: 'Logging In with credentials: ',
+                        text: `username: ${loginUsername} & password: ${loginPassword} `
+                    });
+                    window.location.href = "http://10.1.0.1:3990/logoff";
+                }
+                else if (err.message && err.message.includes('uamservice response is invalid (missing "chap" field)') || err.message && err.message.includes('Timeout')) {
+                    // debugger
+                    console.error("You must be connected to our prepaid hotspot locations. Please contact support or try again by refreshing the page.");
+                    swal.close();
+                    // const url = new URL(window.location);
+                    // url.search = "";  // clear query string
+                    // window.history.replaceState({}, document.title, url.toString());
+                    // window.location.reload()
+                    alert("You must be connected to our prepaid hotspot locations. Please contact support or try again by refreshing the page.");
+                    return "You must be connected to our prepaid hotspot locations. Please contact support or try again by refreshing the page.";
+                } else {
+                    const url = new URL(window.location);
+                    url.search = "";  // clear query string
+                    window.history.replaceState({}, document.title, url.toString());
+                    window.location.reload()
+                    console.error('Unhandled error:', err.message);
+                    swal.close();
+                    return err.message;
+                }
+                // console.error('Login error:', err);
+                // return err.message;
+            }
+            else if (result.clientState === 1) {
+                // add a subroutine that confirms the client State before redirecting in order to reduce false positives.
+                Swal.fire({
+                    imageUrl: "loading2.gif",
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    title: 'Successfully Logged IN',
+                    text: `username: ${loginUsername} & password: ${loginPassword} `
+                });
+                console.log('Hooray! You are logged in');
+                console.log('User URL:', result.redir.originalURL);
+                // alert(data.message + 'Internet is Active . Redirecting you to Google.com');
+                // Stop polling once logged in
+
+                swal.close();
+                if (result.redir.originalURL.includes('.1:3990/logoff')) {
+                    window.location.href = "http://google.com";
+                } else if (result.redir.originalURL.includes('.1:3990')) {
+                    window.location.href = "http://bing.com";
+                } else if (result.redir.originalURL.includes('captive.apple')) {
+                    window.location.href = "http://google.com";
+                } else if (result.redir.originalURL.includes('connecttest.com')) {
+                    window.location.href = "http://google.com";
+                } else if (result.redir.originalURL.includes('connectivitycheck.gstatic.com')) {
+                    window.location.href = "http://yahoo.com";
+                } else if (result.redir.originalURL.includes('msftncsi')) {
+                    window.location.href = "http://yahoo.com";
+                } else if (result.redir.originalURL.includes('generate_204')) {
+                    window.location.href = "http://yahoo.com";
+                } else if (result.redir.originalURL.includes('airport.us')) {
+                    window.location.href = "http://yahoo.com";
+                } else {
+                    window.location.href = result.redir.originalURL;
+                }
+
+                return "Hooray! You are logged in";
+            }
+            else {
+                // debugger
+
+                console.log('Login response:', result);
+                swal.close();
+                let timerIntervalerror;
+                Swal.fire({
+                    title: "Activating Account Failed",
+                    text: result.message,
+                    timer: 6000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    willClose: () => {
+                        document.getElementById('loginPassword').value = "";
+                        clearInterval(timerIntervalerror);
+                    }
+                }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        document.getElementById('loginPassword').value = "";
+                        console.log("No Active Subscription");
+                    }
+                });
+
+                return result.message;
+            }
+        });
+```
+
 ### Global
 
 For globally use Pepper you must build it first. It's very easy:
